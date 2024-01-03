@@ -1,0 +1,7 @@
+這將被寫入到 output.txt
+{"get_ipython": "function", "os": "module", "sys": "module"}
+{"get_ipython": "function", "os": "module", "sys": "module"}
+{"get_ipython": "function", "os": "module", "sys": "module"}
+模塊搜索路徑: ['d:\\程式\\python\\函數', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\DLLs', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\Lib', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312', '', 'C:\\Users\\ACER\\AppData\\Roaming\\Python\\Python312\\site-packages', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\win32', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\win32\\lib', 'c:\\Users\\ACER\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\Pythonwin']
+{"get_ipython": "function", "os": "module", "sys": "module"}
+{"get_ipython": "function", "os": "module", "sys": "module"}
