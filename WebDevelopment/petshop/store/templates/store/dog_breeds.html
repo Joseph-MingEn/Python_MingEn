@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dog Breeds</title>
+</head>
+<body>
+    <h1>Dog Breeds</h1>
+    <ul>
+        {% for dog in dogs %}
+        <li>{{ dog.name }} - {{ dog.breed }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}" class="button">Back to Home</a>
+</body>
+</html>

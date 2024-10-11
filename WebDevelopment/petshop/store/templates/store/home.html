@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>犬堡名犬舍 | 咪堡貓舍</title>
+
+    {% load static %}
+    <link rel="icon" href="{% static 'icons/titleIcon.ico' %}" type="image/x-icon">
+    
+    <style> /*設計按鈕*/
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+</head>
+<body bgcolor="white">
+    <h1>&emsp;
+        <img src="{% static 'photos/犬堡名犬舍.png' %}" alt="Pet Icon">
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <a href="https://line.me/ti/p/ihI-ZLZAdh">
+            <img decoding="async" width="220" height="220" src="{% static 'icons/LINE_logo.svg_.png' %}" alt="" class="wp-image-293" style="width:60px;height:auto" srcset="{% static 'icons/LINE_logo.svg_.png' %} 220w, {% static 'icons/LINE_logo.svg_-150x150.png' %} 150w, {% static 'icons/LINE_logo.svg_-100x100.png' %} 100w" sizes="(max-width: 220px) 100vw, 220px" />
+        </a>
+
+        <a href="https://www.instagram.com/dogbobo_dogbo/">
+            <img decoding="async" width="220" height="220" src="{% static 'icons/Instagram_icon - 220x220.png' %}" alt="" class="wp-image-293" style="width:60px;height:auto" srcset="{% static 'icons/Instagram_icon - 220x220.png' %} 220w, {% static 'icons/Instagram_icon - 150x150.png' %} 150w, {% static 'icons/Instagram_icon - 100x100.png' %} 100w" sizes="(max-width: 220px) 100vw, 220px" />
+        </a>
+        
+        <a href="https://www.facebook.com/profile.php?id=100063787726261">
+            <img decoding="async" width="220" height="220" src="{% static 'icons/Facebook_icon - 220x220.png' %}" alt="" class="wp-image-293" style="width:60px;height:auto" srcset="{% static 'icons/Facebook_icon - 220x220.png' %} 220w, {% static 'icons/Facebook_icon - 150x150.png' %} 150w, {% static 'icons/Facebook_icon - 100x100.png' %} 100w" sizes="(max-width: 220px) 100vw, 220px" />
+        </a>
+        
+        <br> <!-- 換行  -->
+        <div class="welcome-text">
+            <p0 style="font-size: 14px;color: skyblue;">
+                &emsp;&emsp;&emsp;
+                歡迎點擊上方Instagram,Line或Facebook圖示私訊諮詢喔！
+            </p0>
+
+        </div>
+
+        <div class="first-button">
+            <style>
+                p {
+                    background-color: pink;
+                    font-family: ‘Noto Sans TC’, sans-serif;
+                }
+            </style>
+
+            <style> /*設計按鈕*/
+                .button {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    color: white;
+                    background-color: #007BFF;
+                    text-align: center;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    margin: 10px 5px;
+                }
+                .button:hover {
+                    background-color: #0056b3;
+                }
+            </style>
+
+            <p >
+                &emsp;&emsp;&emsp;&emsp;
+                <a href="{% url 'dog_breeds' %}" class="button">狗狗品種</a>
+                <a href="{% url 'cat_breeds' %}" class="button">貓咪品種</a>
+                <a href="{% url 'pet_list' %}" class="button">View Pet List</a>
+                <a href="{% url 'product_list' %}" class="button">View Product List</a>
+            </p>
+
+        </div>
+
+        <div class="bannerindex">
+            <div class="swiper-banner">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide centerBig"><img src="https://www.doing-housework.com/store_image/chyuanbao/A1167530692162.jpg" /></div>
+                <div class="swiper-slide"><img src="https://www.doing-housework.com/store_image/chyuanbao/B2167530692206.jpg" /></div>                              
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        
+    </h1>
+    <h2>Pets</h2>
+    <ul>
+        {% for pet in pets %}
+        <li>{{ pet.name }} - {{ pet.species }} - {{ pet.breed }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Products</h2>
+    <ul>
+        {% for product in products %}
+        <li>{{ product.name }} - ${{ product.price }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'pet_list' %}" class="button">View Pet List</a>
+    <a href="{% url 'product_list' %}" class="button">View Product List</a>
+</body>
+</html>

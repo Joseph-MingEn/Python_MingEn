@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cat Breeds</title>
+</head>
+<body>
+    <h1>Cat Breeds</h1>
+    <ul>
+        {% for cat in cats %}
+        <li>{{ cat.name }} - {{ cat.breed }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'home' %}" class="button">Back to Home</a>
+</body>
+</html>

@@ -4,7 +4,6 @@ from pygame import mixer                # mp3播放模块
 from math import sin, cos, pi, log      # 核心模块，数学函数
 from tkinter import *                   # 窗口主体模块
 
-
 CANVAS_WIDTH = 640   # 画布的宽
 CANVAS_HEIGHT = 640  # 画布的高
 CANVAS_CENTER_X = CANVAS_WIDTH / 2   # 画布中心的X轴坐标
@@ -227,5 +226,5 @@ if __name__ == '__main__':
     heart = Heart()  # 心
     draw(root, canvas, heart)    # 开始画画
     speak_voice("请收下我的心！")   # 要对她说的话
-    heart_voice("51miz-S283175-043A2FE9.mp3")   # 心跳声音
+    heart_voice("C:/Users/TUMINGEN/Documents/GitHub/pymingen/心跳/51miz-S283175-043A2FE9.mp3")# 心跳声音
     root.mainloop()
