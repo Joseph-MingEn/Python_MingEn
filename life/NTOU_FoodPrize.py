@@ -4,9 +4,9 @@ foodType = input("請選擇飯類、麵類、餃類、火鍋類: ")
 if foodType == "飯類":
     weights = [20, 20, 40, 10, 30]
 elif foodType == "麵類":
-    weights = [20, 30, 40, 10, 10]
+    weights = [30, 20, 20, 20, 50]
 elif foodType == "餃類":
-    weights = [20, 30, 40, 10, 10]
+    weights = [50, 20, 10, 20, 10]
 elif foodType == "火鍋類":
     weights = [20, 30, 40, 10, 10]
 
