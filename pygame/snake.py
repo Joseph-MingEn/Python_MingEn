@@ -44,8 +44,8 @@ snake_speed = 15
 score = 0
 
 # 顯示遊戲結束訊息和分數
-font_style = pygame.font.SysFont("bahnschrift", 25)
-score_font = pygame.font.SysFont("comicsansms", 35)
+font_style = pygame.font.SysFont("SimHei", 25)
+score_font = pygame.font.SysFont("SimHei", 35)
 
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
@@ -57,107 +57,163 @@ def show_score(color, font, size):
     score_rect.midtop = (screen_width / 2, 10)
     screen.blit(score_surface, score_rect)
 
-# 遊戲主迴圈
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+def game_menu():
+    while True:
+        screen.fill(WHITE)
+        menu_font = pygame.font.SysFont("SimHei", 50)
+        menu_surface = menu_font.render("Snake", True, BLACK)
+        start_surface = menu_font.render("GameStart", True, BLACK)
+        quit_surface = menu_font.render("End", True, BLACK)
 
-        # 監聽鍵盤事件來控制蛇的移動
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                change_to = 'LEFT'
-            if event.key == pygame.K_RIGHT:
-                change_to = 'RIGHT'
-            if event.key == pygame.K_UP:
-                change_to = 'UP'
-            if event.key == pygame.K_DOWN:
-                change_to = 'DOWN'
+        start_rect = start_surface.get_rect(center=(screen_width / 2, screen_height / 2))
+        quit_rect = quit_surface.get_rect(center=(screen_width / 2, screen_height / 1.5))
 
-    # 確保蛇不會反向
-    if change_to == 'LEFT' and snake_direction != 'RIGHT':
-        snake_direction = 'LEFT'
-    if change_to == 'RIGHT' and snake_direction != 'LEFT':
-        snake_direction = 'RIGHT'
-    if change_to == 'UP' and snake_direction != 'DOWN':
-        snake_direction = 'UP'
-    if change_to == 'DOWN' and snake_direction != 'UP':
-        snake_direction = 'DOWN'
+        screen.blit(menu_surface, (screen_width / 2 - menu_surface.get_width() / 2, screen_height / 4))
+        screen.blit(start_surface, start_rect)
+        screen.blit(quit_surface, quit_rect)
 
-    # 更新蛇的位置
-    if snake_direction == 'LEFT':
-        new_head = (snake_pos[0][0] - block_size, snake_pos[0][1])
-    if snake_direction == 'RIGHT':
-        new_head = (snake_pos[0][0] + block_size, snake_pos[0][1])
-    if snake_direction == 'UP':
-        new_head = (snake_pos[0][0], snake_pos[0][1] - block_size)
-    if snake_direction == 'DOWN':
-        new_head = (snake_pos[0][0], snake_pos[0][1] + block_size)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return  # 開始遊戲
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_rect.collidepoint(event.pos):
+                    return  # 開始遊戲
+                if quit_rect.collidepoint(event.pos):
+                    pygame.quit()
+                    sys.exit()
 
-    # 如果蛇吃到食物
-    snake_pos.insert(0, new_head)
-    if snake_pos[0] == food_pos:
-        food_spawn = False
-        bad_food_spawn = False
-        score += 1
-    elif snake_pos[0] == bad_food_pos:
-        bad_food_spawn = False
-        score -= 1  # 您也可以選擇讓分數不減少，只是顯示一個提示
-    else:
-        snake_pos.pop()
-
-    # 生成新的食物
-    if not food_spawn:
-        food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
-                    random.randrange(1, (screen_height // block_size)) * block_size)
-    food_spawn = True
-
-    # 生成新的壞食物
-    if not bad_food_spawn:
-        bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
-                    random.randrange(1, (screen_height // block_size)) * block_size)
-    bad_food_spawn = True
-
-    # 填充背景顏色
-    screen.fill(WHITE)
-
-    # 畫出網格
-    for x in range(0, screen_width, block_size):
-        pygame.draw.line(screen, GRAY, (x, 0), (x, screen_height))
-    for y in range(0, screen_height, block_size):
-        pygame.draw.line(screen, GRAY, (0, y), (screen_width, y))
-
-    # 畫出蛇
-    for segment in snake_pos:
-        pygame.draw.rect(screen, GREEN, pygame.Rect(segment[0], segment[1], block_size, block_size))
-
-    # 畫出食物
-    pygame.draw.rect(screen, RED, pygame.Rect(food_pos[0], food_pos[1], block_size, block_size))
-    pygame.draw.rect(screen, BLACK, pygame.Rect(bad_food_pos[0], bad_food_pos[1], block_size, block_size))
-
-    # 顯示分數
-    show_score(BLACK, score_font, 35)
-
-    # 檢查是否撞到邊界或自己
-    if (snake_pos[0][0] < 0 or snake_pos[0][0] >= screen_width or
-        snake_pos[0][1] < 0 or snake_pos[0][1] >= screen_height):
-        message("遊戲結束! 撞到邊界", BLACK)
         pygame.display.update()
-        pygame.time.wait(2000)
-        pygame.quit()
-        sys.exit()
+        clock.tick(15)
 
-    for block in snake_pos[1:]:
-        if snake_pos[0] == block:
-            message("遊戲結束! 撞到自己", BLACK)
+def game_loop():
+    global snake_pos, snake_direction, change_to, food_pos, food_spawn, bad_food_pos, bad_food_spawn, score
+
+    snake_pos = [(100, 100), (90, 100), (80, 100)]
+    snake_direction = 'RIGHT'
+    change_to = snake_direction
+    food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
+                random.randrange(1, (screen_height // block_size)) * block_size)
+    food_spawn = True
+    bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
+                random.randrange(1, (screen_height // block_size)) * block_size)
+    bad_food_spawn = True
+    score = 0
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            # 監聽鍵盤事件來控制蛇的移動
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    change_to = 'LEFT'
+                if event.key == pygame.K_RIGHT:
+                    change_to = 'RIGHT'
+                if event.key == pygame.K_UP:
+                    change_to = 'UP'
+                if event.key == pygame.K_DOWN:
+                    change_to = 'DOWN'
+
+        # 確保蛇不會反向
+        if change_to == 'LEFT' and snake_direction != 'RIGHT':
+            snake_direction = 'LEFT'
+        if change_to == 'RIGHT' and snake_direction != 'LEFT':
+            snake_direction = 'RIGHT'
+        if change_to == 'UP' and snake_direction != 'DOWN':
+            snake_direction = 'UP'
+        if change_to == 'DOWN' and snake_direction != 'UP':
+            snake_direction = 'DOWN'
+
+        # 更新蛇的位置
+        if snake_direction == 'LEFT':
+            new_head = (snake_pos[0][0] - block_size, snake_pos[0][1])
+        if snake_direction == 'RIGHT':
+            new_head = (snake_pos[0][0] + block_size, snake_pos[0][1])
+        if snake_direction == 'UP':
+            new_head = (snake_pos[0][0], snake_pos[0][1] - block_size)
+        if snake_direction == 'DOWN':
+            new_head = (snake_pos[0][0], snake_pos[0][1] + block_size)
+
+        # 如果蛇吃到食物
+        snake_pos.insert(0, new_head)
+        if snake_pos[0] == food_pos:
+            food_spawn = False
+            bad_food_spawn = False
+            score += 1
+        elif snake_pos[0] == bad_food_pos:
+            bad_food_spawn = False
+            # score -= 1  # 您也可以選擇讓分數不減少，只是顯示一個提示
+
+            message("Game over! Eating Bad Food", BLACK)
             pygame.display.update()
             pygame.time.wait(2000)
-            pygame.quit()
-            sys.exit()
+            return
+        
+        else:
+            snake_pos.pop()
 
-    # 更新顯示
-    pygame.display.update()
+        # 生成新的食物
+        if not food_spawn:
+            food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
+                        random.randrange(1, (screen_height // block_size)) * block_size)
+        food_spawn = True
 
-    # 設定遊戲速度
-    clock.tick(snake_speed)
+        # 生成新的壞食物
+        if not bad_food_spawn:
+            bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
+                        random.randrange(1, (screen_height // block_size)) * block_size)
+        bad_food_spawn = True
+
+        # 填充背景顏色
+        screen.fill(WHITE)
+
+        # 畫出網格
+        for x in range(0, screen_width, block_size):
+            pygame.draw.line(screen, GRAY, (x, 0), (x, screen_height))
+        for y in range(0, screen_height, block_size):
+            pygame.draw.line(screen, GRAY, (0, y), (screen_width, y))
+
+        # 畫出蛇
+        for segment in snake_pos:
+            pygame.draw.rect(screen, GREEN, pygame.Rect(segment[0], segment[1], block_size, block_size))
+
+        # 畫出食物
+        pygame.draw.rect(screen, RED, pygame.Rect(food_pos[0], food_pos[1], block_size, block_size))
+        pygame.draw.rect(screen, BLACK, pygame.Rect(bad_food_pos[0], bad_food_pos[1], block_size, block_size))
+
+        # 顯示分數
+        show_score(BLACK, score_font, 35)
+
+        # 檢查是否撞到邊界或自己
+        if (snake_pos[0][0] < 0 or snake_pos[0][0] >= screen_width or
+            snake_pos[0][1] < 0 or snake_pos[0][1] >= screen_height):
+            message("遊戲結束! 撞到邊界", BLACK)
+            pygame.display.update()
+            pygame.time.wait(2000)
+            return
+
+        for block in snake_pos[1:]:
+            if snake_pos[0] == block:
+                message("遊戲結束! 撞到自己", BLACK)
+                pygame.display.update()
+                pygame.time.wait(2000)
+                return
+
+        # 更新顯示
+        pygame.display.update()
+
+        # 設定遊戲速度
+        clock.tick(snake_speed)
+
+while True:
+    game_menu()
+    game_loop()
