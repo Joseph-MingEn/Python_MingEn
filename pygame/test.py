@@ -56,7 +56,7 @@ bad_food_spawn = True
 
 # 設定遊戲速度
 clock = pygame.time.Clock()
-snake_speed = 15
+snake_speed = 10
 
 # 設定初始分數
 score = 0
@@ -220,5 +220,6 @@ def game_loop():
         clock.tick(snake_speed)
 
 # 主程式流程
-game_menu()
-game_loop()
+while True:
+    game_menu()
+    game_loop()
