@@ -168,6 +168,13 @@ def game_loop():
             pygame.time.wait(2000)
             return
 
+        # 檢查是否吃到自己
+        if new_head in snake_pos:
+            message("Game Over! You ate yourself.", RED)
+            pygame.display.update()
+            pygame.time.wait(2000)
+            return
+
         # 如果蛇吃到食物
         snake_pos.insert(0, new_head)
         if snake_pos[0] == food_pos:
@@ -176,7 +183,7 @@ def game_loop():
             score += 1
         elif snake_pos[0] == bad_food_pos:
             bad_food_spawn = False
-            message("Game over! Eating Bad Food", BLACK)
+            message("Game Over! Eating Bad Food", BLACK)
             pygame.display.update()
             pygame.time.wait(2000)
             return
@@ -219,7 +226,7 @@ def game_loop():
         pygame.display.update()
         clock.tick(snake_speed)
 
-# 主程式流程
+# 主程式
 while True:
     game_menu()
     game_loop()

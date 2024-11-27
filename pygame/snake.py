@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import os
 
 # 初始化 Pygame
 pygame.init()
@@ -21,24 +22,41 @@ GRAY = (200, 200, 200)
 # 方塊大小
 block_size = 20
 
+# 改進的圖片載入函數
+def load_image(path):
+    if not os.path.exists(path):
+        print(f"Error: File '{path}' not found.")
+        sys.exit()
+    return pygame.image.load(path)
+
+# 載入圖片
+snake_head_img = load_image("pygame\\head_0.png")
+snake_body_img = load_image("pygame\\body_0.png")
+food_img = load_image("pygame\\food_0.png")
+bad_food_img = load_image("pygame\\bad_food_0.png")
+
+# 調整圖片大小
+snake_head_img = pygame.transform.scale(snake_head_img, (block_size, block_size))
+snake_body_img = pygame.transform.scale(snake_body_img, (block_size, block_size))
+food_img = pygame.transform.scale(food_img, (block_size, block_size))
+bad_food_img = pygame.transform.scale(bad_food_img, (block_size, block_size))
+
 # 設定蛇的初始位置
 snake_pos = [(100, 100), (90, 100), (80, 100)]
 snake_direction = 'RIGHT'
 change_to = snake_direction
 
-# 設定食物的位置
+# 設定食物和壞食物的位置
 food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
             random.randrange(1, (screen_height // block_size)) * block_size)
-food_spawn = True
-
-# 設定壞食物的位置
 bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
-            random.randrange(1, (screen_height // block_size)) * block_size)
+                random.randrange(1, (screen_height // block_size)) * block_size)
+food_spawn = True
 bad_food_spawn = True
 
 # 設定遊戲速度
 clock = pygame.time.Clock()
-snake_speed = 15
+snake_speed = 10
 
 # 設定初始分數
 score = 0
@@ -100,9 +118,9 @@ def game_loop():
     change_to = snake_direction
     food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
                 random.randrange(1, (screen_height // block_size)) * block_size)
-    food_spawn = True
     bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
-                random.randrange(1, (screen_height // block_size)) * block_size)
+                    random.randrange(1, (screen_height // block_size)) * block_size)
+    food_spawn = True
     bad_food_spawn = True
     score = 0
 
@@ -143,6 +161,20 @@ def game_loop():
         if snake_direction == 'DOWN':
             new_head = (snake_pos[0][0], snake_pos[0][1] + block_size)
 
+        # 檢查是否出界
+        if new_head[0] < 0 or new_head[0] >= screen_width or new_head[1] < 0 or new_head[1] >= screen_height:
+            message("Game Over! Out of Bounds.", RED)
+            pygame.display.update()
+            pygame.time.wait(2000)
+            return
+
+        # 檢查是否吃到自己
+        if new_head in snake_pos:
+            message("Game Over! You ate yourself.", RED)
+            pygame.display.update()
+            pygame.time.wait(2000)
+            return
+
         # 如果蛇吃到食物
         snake_pos.insert(0, new_head)
         if snake_pos[0] == food_pos:
@@ -151,13 +183,10 @@ def game_loop():
             score += 1
         elif snake_pos[0] == bad_food_pos:
             bad_food_spawn = False
-            # score -= 1  # 您也可以選擇讓分數不減少，只是顯示一個提示
-
-            message("Game over! Eating Bad Food", BLACK)
+            message("Game Over! Eating Bad Food", BLACK)
             pygame.display.update()
             pygame.time.wait(2000)
             return
-        
         else:
             snake_pos.pop()
 
@@ -170,7 +199,7 @@ def game_loop():
         # 生成新的壞食物
         if not bad_food_spawn:
             bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
-                        random.randrange(1, (screen_height // block_size)) * block_size)
+                            random.randrange(1, (screen_height // block_size)) * block_size)
         bad_food_spawn = True
 
         # 填充背景顏色
@@ -182,38 +211,22 @@ def game_loop():
         for y in range(0, screen_height, block_size):
             pygame.draw.line(screen, GRAY, (0, y), (screen_width, y))
 
-        # 畫出蛇
-        for segment in snake_pos:
-            pygame.draw.rect(screen, GREEN, pygame.Rect(segment[0], segment[1], block_size, block_size))
+        # 畫出蛇（使用圖片）
+        screen.blit(snake_head_img, (snake_pos[0][0], snake_pos[0][1]))
+        for segment in snake_pos[1:]:
+            screen.blit(snake_body_img, (segment[0], segment[1]))
 
-        # 畫出食物
-        pygame.draw.rect(screen, RED, pygame.Rect(food_pos[0], food_pos[1], block_size, block_size))
-        pygame.draw.rect(screen, BLACK, pygame.Rect(bad_food_pos[0], bad_food_pos[1], block_size, block_size))
+        # 畫出食物（使用圖片）
+        screen.blit(food_img, (food_pos[0], food_pos[1]))
+        screen.blit(bad_food_img, (bad_food_pos[0], bad_food_pos[1]))
 
         # 顯示分數
         show_score(BLACK, score_font, 35)
 
-        # 檢查是否撞到邊界或自己
-        if (snake_pos[0][0] < 0 or snake_pos[0][0] >= screen_width or
-            snake_pos[0][1] < 0 or snake_pos[0][1] >= screen_height):
-            message("遊戲結束! 撞到邊界", BLACK)
-            pygame.display.update()
-            pygame.time.wait(2000)
-            return
-
-        for block in snake_pos[1:]:
-            if snake_pos[0] == block:
-                message("遊戲結束! 撞到自己", BLACK)
-                pygame.display.update()
-                pygame.time.wait(2000)
-                return
-
-        # 更新顯示
         pygame.display.update()
-
-        # 設定遊戲速度
         clock.tick(snake_speed)
 
+# 主程式
 while True:
     game_menu()
     game_loop()
