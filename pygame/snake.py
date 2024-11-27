@@ -16,6 +16,7 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
+GRAY = (200, 200, 200)
 
 # 方塊大小
 block_size = 20
@@ -30,6 +31,7 @@ food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
             random.randrange(1, (screen_height // block_size)) * block_size)
 food_spawn = True
 
+# 設定壞食物的位置
 bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
             random.randrange(1, (screen_height // block_size)) * block_size)
 bad_food_spawn = True
@@ -38,12 +40,22 @@ bad_food_spawn = True
 clock = pygame.time.Clock()
 snake_speed = 15
 
-# 顯示遊戲結束訊息
+# 設定初始分數
+score = 0
+
+# 顯示遊戲結束訊息和分數
 font_style = pygame.font.SysFont("bahnschrift", 25)
+score_font = pygame.font.SysFont("comicsansms", 35)
 
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
     screen.blit(mesg, [screen_width / 6, screen_height / 3])
+
+def show_score(color, font, size):
+    score_surface = font.render(f"Score : {score}", True, color)
+    score_rect = score_surface.get_rect()
+    score_rect.midtop = (screen_width / 2, 10)
+    screen.blit(score_surface, score_rect)
 
 # 遊戲主迴圈
 while True:
@@ -88,8 +100,10 @@ while True:
     if snake_pos[0] == food_pos:
         food_spawn = False
         bad_food_spawn = False
+        score += 1
     elif snake_pos[0] == bad_food_pos:
         bad_food_spawn = False
+        score -= 1  # 您也可以選擇讓分數不減少，只是顯示一個提示
     else:
         snake_pos.pop()
 
@@ -99,6 +113,7 @@ while True:
                     random.randrange(1, (screen_height // block_size)) * block_size)
     food_spawn = True
 
+    # 生成新的壞食物
     if not bad_food_spawn:
         bad_food_pos = (random.randrange(1, (screen_width // block_size)) * block_size,
                     random.randrange(1, (screen_height // block_size)) * block_size)
@@ -107,6 +122,12 @@ while True:
     # 填充背景顏色
     screen.fill(WHITE)
 
+    # 畫出網格
+    for x in range(0, screen_width, block_size):
+        pygame.draw.line(screen, GRAY, (x, 0), (x, screen_height))
+    for y in range(0, screen_height, block_size):
+        pygame.draw.line(screen, GRAY, (0, y), (screen_width, y))
+
     # 畫出蛇
     for segment in snake_pos:
         pygame.draw.rect(screen, GREEN, pygame.Rect(segment[0], segment[1], block_size, block_size))
@@ -114,6 +135,9 @@ while True:
     # 畫出食物
     pygame.draw.rect(screen, RED, pygame.Rect(food_pos[0], food_pos[1], block_size, block_size))
     pygame.draw.rect(screen, BLACK, pygame.Rect(bad_food_pos[0], bad_food_pos[1], block_size, block_size))
+
+    # 顯示分數
+    show_score(BLACK, score_font, 35)
 
     # 檢查是否撞到邊界或自己
     if (snake_pos[0][0] < 0 or snake_pos[0][0] >= screen_width or
