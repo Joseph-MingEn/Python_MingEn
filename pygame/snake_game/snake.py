@@ -30,10 +30,10 @@ def load_image(path):
     return pygame.image.load(path)
 
 # 載入圖片
-snake_head_img = load_image("pygame\\head_0.png")
-snake_body_img = load_image("pygame\\body_0.png")
-food_img = load_image("pygame\\food_0.png")
-bad_food_img = load_image("pygame\\bad_food_0.png")
+snake_head_img = load_image("pygame\\snake_game\\head_0.png")
+snake_body_img = load_image("pygame\\snake_game\\body_0.png")
+food_img = load_image("pygame\\snake_game\\food_0.png")
+bad_food_img = load_image("pygame\\snake_game\\bad_food_0.png")
 
 # 調整圖片大小
 snake_head_img = pygame.transform.scale(snake_head_img, (block_size, block_size))
