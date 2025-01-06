@@ -21,7 +21,7 @@ while rate <= 0:
 
 time = 0
 while time <= 0:
-    time = float(input("Enter your rate:"))
+    time = float(input("Enter your time:"))
 
     if time <= 0:
         print("Invalid time. Please enter a positive number.")
