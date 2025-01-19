@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe",
+    "python.pythonPath": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "files.trimTrailingWhitespace": true, // 儲存的時候，會幫你自動過濾多餘的空格
