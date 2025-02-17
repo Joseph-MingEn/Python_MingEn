@@ -8,6 +8,22 @@ class Duck:
         print("Duck talking")
 
 class Dog:
+    color = "red"
+
+    def Dog(self):
+        self.age = 10
+
+    def getAge(self):
+        print(self.age)
+
+    @classmethod
+    def getColor(cls):
+        print(cls.color)
+
+    @staticmethod
+    def getSpecies():
+        return "Dog"
+
     def walk(self):
         print("Dog walking")
 
