@@ -8,7 +8,8 @@ class Solution(object):
         ans = [[0 for _ in range(n)] for _ in range(n)]
         dirs = [0, n - 1, 0, n - 1]
         count = n
-        num, total = 1, n * n
+        num = 0
+        total = n * n
 
         while num <= total:
             for i in range(dirs[0], dirs[1] + 1):
